@@ -13,6 +13,13 @@ par_binary(
 )
 
 par_binary(
+    name = "piplock_to_requirements",
+    srcs = ["piplock_to_requirements.py"],
+    visibility = ["//visibility:public"],
+    deps = [],
+)
+
+par_binary(
     name = "create_pip_repository",
     srcs = ["create_pip_repository.py"],
     visibility = ["//visibility:public"],
