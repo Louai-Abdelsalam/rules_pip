@@ -17,7 +17,14 @@ def _select_requirements_for_platform(repo_ctx):
     )
 
 def _pip_repository_impl(repo_ctx):
-    repo_ctx.file("BUILD", "")
+    BUILD_FILE_CONTENT = """
+filegroup(
+    name = "wheels",
+    srcs = glob(["*.whl"]),
+    visibility = ["//visibility:public"],
+)
+    """
+    repo_ctx.file("BUILD", BUILD_FILE_CONTENT)
 
     create_repo_exe_path = repo_ctx.path(repo_ctx.attr._create_repo_exe)
     repo_directory = repo_ctx.path("")
