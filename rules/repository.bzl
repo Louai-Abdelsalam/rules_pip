@@ -45,18 +45,10 @@ filegroup(
     elif repo_ctx.attr.requirements_per_platform:
         requirements_path = _select_requirements_for_platform(repo_ctx)
     else:
-        print("Either 'pip_lock', 'requirements' or 'requirements_per_platform' is required")
         fail(
             "Either 'pip_lock', 'requirements' or 'requirements_per_platform' is required",
             attr = "pip_repository",
         )
-
-    r = repo_ctx.execute([
-        repo_ctx.attr.python_interpreter,
-        "--version"
-    ])
-
-    print("STDOUT OF PYTHON --VERSION: " + r.stdout)
 
     r = repo_ctx.execute([
         repo_ctx.attr.python_interpreter,
@@ -65,11 +57,7 @@ filegroup(
         requirements_path,
     ] + repo_ctx.attr.wheel_args, quiet = repo_ctx.attr.quiet)
     if r.return_code:
-        print("RETURN_CODE: " + r.return_code)
         fail(r.stderr)
-    print("PKGS DOWNLOAD STDOUT: " + r.stdout)
-    if r.stderr:
-        print("PKGS DOWNLOAD STDERR:" + r.stderr)
 
 pip_repository = repository_rule(
     implementation = _pip_repository_impl,
