@@ -29,6 +29,15 @@ filegroup(
     create_repo_exe_path = repo_ctx.path(repo_ctx.attr._create_repo_exe)
     repo_directory = repo_ctx.path("")
 
+    r = repo_ctx.execute([
+        repo_ctx.attr.python_interpreter,
+        "-c",
+        "import sys; print(sys.path); print(sys.executable)",
+    ], quiet = repo_ctx.attr.quiet)
+    
+    if not repo_ctx.attr.quiet:
+        print(r.stdout)
+
     if repo_ctx.attr.pip_lock:
         requirements_path = repo_ctx.path("requirements.txt")
         repo_ctx.file(requirements_path, content = '')
@@ -72,7 +81,8 @@ pip_repository = repository_rule(
             allow_files = True,
             allow_empty = False,
         ),
-        "python_interpreter": attr.string(default = "python"),
+        #"python_interpreter": attr.string(default = "python"),
+        "python_interpreter": attr.label(),
         "wheel_args": attr.string_list(),
         "quiet": attr.bool(default = True),
         "_create_repo_exe": attr.label(
